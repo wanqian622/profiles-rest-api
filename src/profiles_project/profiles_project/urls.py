@@ -15,7 +15,10 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from django.conf.urls import include
 
+# admin site map to admin.site.urls
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^api/', include('profiles_api.urls')),
 ]

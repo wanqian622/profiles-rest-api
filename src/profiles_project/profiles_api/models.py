@@ -77,8 +77,8 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
         """ Used to get a user's full name. """
         return self.name
 
-    def get_short_name(name):
-        """ Used to get a user's short name. """
+    def get_short_name(self):
+        """Django uses this when it needs to get the users abbreviated name."""
         return self.name
 
     # STR: return our object as a string

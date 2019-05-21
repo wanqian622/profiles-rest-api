@@ -70,6 +70,7 @@ class HelloApiView(APIView):
 
 class HelloViewSet(viewsets.ViewSet):
     """Test API viewset. """
+    serializer_class = serializers.HelloSerializer
 
     # Add LIST action
     # list all of the objects in the system
@@ -83,4 +84,46 @@ class HelloViewSet(viewsets.ViewSet):
 
         return Response({'message':'Hello!', 'a_viewset': a_viewset})
 
-    
+    # Add CREATE action
+    # the create function take care of the HTTP POST
+    # function; Create a new object in the system
+    def create(self, request):
+        """ create a new hello message. """
+
+        # define the serializer, and pass it the request data
+        serializer = serializer.HelloSerializer(data=request.data)
+
+        if serializer.is_valid():
+            name = serializer.data.get('name')
+            message = 'Hello {0}'.format(name)
+            return Response({'message':message})
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    # Add retrieve action
+    # It takes care of getting a specifit object by its id
+    def retrieve(self, request, pk=None):
+        """Handles getting an object by its ID"""
+
+        return Response({'http_method': 'GET'})
+
+    # Add UPDATE action
+    # the create function take care of the HTTP PUT
+    # function; update an object in the system
+    def update(self, request, pk=None):
+        """Handles updating an object by its ID"""
+        return Response({'http_method': 'PUT'})
+
+    # Add PARTIAL UPDATING action
+    # the create function take care of the HTTP Patch
+    # function; partial update an object in the system
+    def partial_update(self, request, pk=None):
+        """Handles partial updating an object by its ID"""
+        return Response({'http_method': 'PATCH'})
+
+    # Add DESTORY action
+    # the create function take care of the HTTP DELETE
+    # function; delete an object in the system
+    def destroy(self, request, pk=None):
+        """Handles removing an object by its ID"""
+        return Response({'http_method': 'DELETE'})

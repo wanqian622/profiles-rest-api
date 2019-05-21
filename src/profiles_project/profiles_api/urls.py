@@ -15,6 +15,11 @@ router = DefaultRouter()
 # The third para, we need to give a base name.
 router.register('hello-viewset', views.HelloViewSet, base_name='hello-viewset')
 
+# No need to specify base name when registering a model viewset.
+# because django rest framework can automatically figure it out
+# by looking at the model that's registered with the serializer that's registered
+# on our viewset
+router.register('profile', views.UserProfileViewSet)
 
 urlpatterns = [
 # render this result of this views API view, and return it to the screen

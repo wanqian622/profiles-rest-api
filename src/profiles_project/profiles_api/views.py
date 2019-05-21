@@ -9,6 +9,9 @@ from rest_framework import status
 # import our serializer object
 from . import serializers
 
+# import models
+from . import models
+
 
 # Create your views here.
 
@@ -127,3 +130,16 @@ class HelloViewSet(viewsets.ViewSet):
     def destroy(self, request, pk=None):
         """Handles removing an object by its ID"""
         return Response({'http_method': 'DELETE'})
+
+class UserProfileViewSet(viewsets.ModelViewSet):
+    """Handls creating, reading and updating profiles. """
+
+    # define the serializer class
+    # the serializer has the model class set in the
+    # Metadata, it knows which model to look for handling out user obj
+    serializer_class = serializers.UserProfileSerializer
+
+    # Create the query set, which tells the viewset
+    # how to retrieve the object from our db.
+    # list all objects in the db
+    queryset = models.UserProfile.objects.all()

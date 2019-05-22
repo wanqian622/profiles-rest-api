@@ -20,6 +20,8 @@ router.register('hello-viewset', views.HelloViewSet, base_name='hello-viewset')
 # by looking at the model that's registered with the serializer that's registered
 # on our viewset
 router.register('profile', views.UserProfileViewSet)
+# login is the viewset but not the model viewset, so we need to ser base_name
+router.register('login', views.LoginViewSet, base_name='login')
 
 urlpatterns = [
 # render this result of this views API view, and return it to the screen

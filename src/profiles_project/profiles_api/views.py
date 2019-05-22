@@ -21,6 +21,9 @@ from rest_framework.authentication import TokenAuthentication
 # import filter model
 from rest_framework import filters
 
+from rest_framework.authtoken.serializers import AuthTokenSerializer
+from rest_framework.authtoken.views import ObtainAuthToken
+
 
 # Create your views here.
 
@@ -165,3 +168,17 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     # we need to tell it which fields we want to allow the user to filter by
     # name and email are the fields that we want to search on
     search_fields = ('name', 'email',)
+
+class LoginViewSet(viewsets.ViewSet):
+    """Checks email and password and returns an auth token. """
+    # Set the serializer class to the auth token serializer
+    serializer_class = AuthTokenSerializer
+
+    # Define a create function
+    # create is what is called when you make a HTTP POST to the viewset
+    def create(self, request):
+        """Use the ObtainAuthToken APIView to validate and create a token. """
+        # pass the request through to the ObtainAuthToken API view
+        # and call the post function
+        return ObtainAuthToken().post(request)
+        

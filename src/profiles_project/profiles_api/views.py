@@ -18,6 +18,9 @@ from . import permissions
 # import token auth
 from rest_framework.authentication import TokenAuthentication
 
+# import filter model
+from rest_framework import filters
+
 
 # Create your views here.
 
@@ -150,8 +153,15 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     # list all objects in the db
     queryset = models.UserProfile.objects.all()
 
-    # Adding token authentication, truple lists what type of auth
+    # Adding token authentication, tuple lists what type of auth
     authentication_classes = (TokenAuthentication,)
 
-    # Defining the permission class, truple
+    # Defining the permission class, tuple
     permission_classes = (permissions.UpdateOwnProfile,)
+
+    # list all filters we want in the tuple have as an option on this viewset
+    filter_backends = (filters.SearchFilter,)
+
+    # we need to tell it which fields we want to allow the user to filter by
+    # name and email are the fields that we want to search on
+    search_fields = ('name', 'email',)

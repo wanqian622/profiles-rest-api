@@ -12,6 +12,12 @@ from . import serializers
 # import models
 from . import models
 
+# import permissions
+from . import permissions
+
+# import token auth
+from rest_framework.authentication import TokenAuthentication
+
 
 # Create your views here.
 
@@ -143,3 +149,9 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     # how to retrieve the object from our db.
     # list all objects in the db
     queryset = models.UserProfile.objects.all()
+
+    # Adding token authentication, truple lists what type of auth
+    authentication_classes = (TokenAuthentication,)
+
+    # Defining the permission class, truple
+    permission_classes = (permissions.UpdateOwnProfile,)

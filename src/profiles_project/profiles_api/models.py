@@ -85,3 +85,29 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         """ Django uses this when it needs to convert the object to a string. """
         return self.email
+
+class ProfileFeedItem(models.Model):
+    """Profile status update. """
+
+    # user_profile points to the user profile that this update correspond to
+    # A foreign key creates a link from this model to another model in our db
+    # First para : a string called UserProfile
+    # Second para: pass what we want to do when the object is deleted (what to
+    # do if the user profile object ever gets deleted)
+    # models_CASCADE: if the user delete their profile then just go
+    # ahead and delete all of the profile status updates that go along with it.
+    user_profile = models.ForeignKey('UserProfile', on_delete=models.CASCADE)
+
+    # store the text that the user adds to their status
+    status_text = models.CharField(max_length=255)
+
+    # The created_on field is to store the data that the profile status update
+    # was created on.
+    created_on = models.DateTimeField(auto_now_add=True)
+
+    # STR representation of the model
+    # python knows how to convert our model object to a string.
+    def __str__(self):
+        """Return the model as a string. """
+        # return status text.
+        return self.status_text

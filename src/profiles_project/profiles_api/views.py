@@ -23,6 +23,10 @@ from rest_framework import filters
 
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.authtoken.views import ObtainAuthToken
+# if a user is Authenticated, he can do anything
+# if not, he can only readonly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticated
 
 
 # Create your views here.
@@ -181,4 +185,42 @@ class LoginViewSet(viewsets.ViewSet):
         # pass the request through to the ObtainAuthToken API view
         # and call the post function
         return ObtainAuthToken().post(request)
-        
+
+class UserProfileFeedViewSet(viewsets.ModelViewSet):
+    """Handles creating, reading and updating feed items. """
+
+    # Adding token authentication, tuple lists what type of auth
+    authentication_classes = (TokenAuthentication,)
+
+    # define the serializer class
+    # the serializer has the model class set in the
+    # Metadata, it knows which model to look for handling out user obj
+    serializer_class = serializers.ProfileFeedItemSerializer
+
+    # Create the query set, which tells the viewset
+    # how to retrieve the object from our db.
+    # list all objects in the db
+    queryset = models.ProfileFeedItem.objects.all()
+    # It will only allow them to update and create and modify
+    # if they log in,  or it will restrict them to read_only
+    # And then, if the user is trying to create or update a new status
+    # it will run our permissions.PostOwnStatus to check whether they
+    # try to update their own status.
+    permission_classes = (permissions.PostOwnStatus, IsAuthenticated)
+
+    # the perform_create function is a func that we can add
+    # to our viewset to customize the logic that's run when
+    # we create a new object for our viewset.
+    # when django rest framework creates a new object in our viewset
+    # we want to customize this to make sure that the user profile
+    # of the ProfileFeedItem is set to the currently logined in user.
+    # When the rest framework creates a new object  with our
+    # vewset it will call this function and it will pass
+    # on the valid serializer
+    # we can then use the serializer to create a new object
+    # but when we create a new object, we will manually set
+    # the user profile to the profile that is currently
+    # logged in.
+    def perform_create(self, serializer):
+        """Sets the user profile to the logged in user. """
+        serializer.save(user_profile=self.request.user)

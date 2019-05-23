@@ -22,6 +22,7 @@ router.register('hello-viewset', views.HelloViewSet, base_name='hello-viewset')
 router.register('profile', views.UserProfileViewSet)
 # login is the viewset but not the model viewset, so we need to ser base_name
 router.register('login', views.LoginViewSet, base_name='login')
+router.register('feed', views.UserProfileFeedViewSet)
 
 urlpatterns = [
 # render this result of this views API view, and return it to the screen

@@ -9,7 +9,7 @@ class UpdateOwnProfile(permissions.BasePermission):
         """Check user is trying to edit their own profile."""
 
         # Allow users to be able to view any profile in the system
-        # By checking the safe methods list which is provided by 
+        # By checking the safe methods list which is provided by
         # the django rest framework.
         # A safe method is a HTTP method that is classified as safe.
         # It is a non destructive method so it allows you to retrieve
@@ -22,3 +22,12 @@ class UpdateOwnProfile(permissions.BasePermission):
 
         # If the users updates their own profile
         return obj.id == request.user.id
+
+class PostOwnStatus(permissions.BasePermission):
+    """Allow users to update their own status"""
+    def has_object_permission(self, request, view, obj):
+        """Check the user is trying to update their own status. """
+        if request.method in permissions.SAFE_METHODS:
+            return True
+
+        return obj.user_profile.id == request.user.id
